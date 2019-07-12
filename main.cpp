@@ -409,7 +409,7 @@ bool checkPumpedString (vector <string> var, vector <string> expo, vector<int> m
                 stringPositionB += 1;
             }
             else{
-                C = testString[i];
+                C = testString[i + stringPositionA];
                 stringPositionB +=1;
                 break;
             }
