@@ -239,7 +239,7 @@ vector<string> readLine()
 /*************************Checks if Pumped string is an ellement of input langage ***********************/
 bool checkPumpedString (vector <string> var, vector <string> expo, vector<int> min, string x, string y, string z){
     int i = 0, j = 0;
-    int stringPositionA = 1, stringPositionB = 0;
+    int stringPositionA = 1, stringPositionB = 0, stringPositionC = 0;
     string pumpedY = y;
     string testString;
     string A,B,C;
@@ -283,12 +283,97 @@ bool checkPumpedString (vector <string> var, vector <string> expo, vector<int> m
                 return true;
             }
             else{
-                cout << "\n\nBecause we have two diffrent values for \"" << expo[0] << "\" we show that the pumped string\n";
-                cout << "is not an ellement of the language. This shows a contradiction and therfore" << endl;
                 return false;
             }
         }
         else if ((A.size() >= min[0]) && (B.size() >= min[1])){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    else if (var.size() ==3){
+        pumpedY = pumpedY + y;
+        pumpedY = pumpedY + y;
+        testString = x + pumpedY + z;
+        cout << "\n\nPumped test string: " << testString << endl;
+        
+        //Parses the Data into the first and second variables
+        A = testString[0];
+        for (i = 1; i < testString.size(); ++i){
+            if (testString[i] == x[0]){
+                A = A + testString[i];
+                stringPositionA += 1;
+            }
+            else{
+                B = testString[i];
+                stringPositionA += 1;
+                break;
+            }
+        }
+        //Find B
+        stringPositionB = stringPositionA;
+        for (i = 0; i < testString.size(); ++i){
+            if (testString[i + stringPositionA] == B[0]){
+                B = B + testString[i + stringPositionA];
+                stringPositionB += 1;
+            }
+            else{
+                C = testString[i];
+                stringPositionB +=1;
+                break;
+            }
+        }
+        //Find C
+        stringPositionC = stringPositionB;
+        for(i = 0; i < testString.size(); ++i){
+            if(testString[i + stringPositionB] == C[0]){
+                C = C + testString[i + stringPositionB];
+                stringPositionC +=1;
+            }
+            else{
+                break;
+            }
+        }
+        
+        cout << var[0] << "^" <<expo[0] << " (" << expo[0] << " >= " << min[0] << "): " << A << endl;
+        cout << var[1] << "^" <<expo[1] << " (" << expo[1] << " >= " << min[1] << "): " << B << endl;
+        cout << var[2] << "^" <<expo[2] << " (" << expo[2] << " >= " << min[2] << "): " << C << endl;
+        //****************Checks if test string is an element of the language*/
+        if (expo[0] == expo[1] && expo[1] == expo[2]){
+            if (A.size() == B.size() && B.size() == C.size()){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else if(expo[0] == expo[1]){
+            if (A.size() == B.size()){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else if(expo[0] == expo[2]){
+            if (A.size() == C.size()){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else if(expo[1] == expo[2]){
+            if (B.size() == C.size()){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else if ((A.size() >= min[0]) && (B.size() >= min[1]) && (C.size() >= min[2])){
             return true;
         }
         else{
