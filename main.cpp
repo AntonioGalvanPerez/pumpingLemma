@@ -184,7 +184,16 @@ bool  pumpingTest(vector<string> var, vector<string> expo, vector<int> min){
 
 /****************Checks for 3 variables******************/
     if(var.size() ==3){
-        cout << "\nFIXME 3 Variables" << endl;
+        if(intCount == 2){
+            return true;
+        }
+        else if (isdigit(expo[0][0])){
+            cout << "\n\nP = min[0] + 1" << endl;
+        }
+        else{
+            cout << "\n\nP = min[0]" << endl;
+        }
+
     }
     return false;
 }
@@ -286,11 +295,7 @@ bool checkPumpedString (vector <string> var, vector <string> expo, vector<int> m
             return false;
         }
     }
-    
-    
-    
-    
-        
+
     return true;
     
 }
