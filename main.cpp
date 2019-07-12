@@ -30,7 +30,7 @@ int main(int argc, const char *argv[])
     
     var = readLine();
     
-    cout << "Enter each exponents. If variable has no exponent enter 1.\n";
+    cout << "Enter each exponent. If variable has no exponent enter 1.\n\n";
     
     for (i = 0; i < var.size(); ++i)
     {
@@ -230,8 +230,8 @@ vector<string> readLine()
 /*************************Checks if Pumped string is an ellement of input langage ***********************/
 bool checkPumpedString (vector <string> var, vector <string> expo, vector<int> min, string x, string y, string z){
     int i = 0, j = 0;
-    int stringPositionA = 0, stringPositionB = 0;
-    string pumpedY;
+    int stringPositionA = 1, stringPositionB = 0;
+    string pumpedY = y;
     string testString;
     string A,B,C;
     
@@ -243,7 +243,7 @@ bool checkPumpedString (vector <string> var, vector <string> expo, vector<int> m
         
         //Parses the Data into the first and second variables
         A = testString[0];
-        for (i = 0; i < testString.size(); ++i){
+        for (i = 1; i < testString.size(); ++i){
             if (testString[i] == x[0]){
                 A = A + testString[i];
                 stringPositionA += 1;
@@ -266,8 +266,8 @@ bool checkPumpedString (vector <string> var, vector <string> expo, vector<int> m
             }
         }
         
-        cout << var[0] << "^" <<expo[0] << " (" << var[0] << " >= " << min[0] << "): " << A << endl;
-        cout << var[1] << "^" <<expo[1] << " (" << var[1] << " >= " << min[1] << "): " << B << endl;
+        cout << var[0] << "^" <<expo[0] << " (" << expo[0] << " >= " << min[0] << "): " << A << endl;
+        cout << var[1] << "^" <<expo[1] << " (" << expo[1] << " >= " << min[1] << "): " << B << endl;
         //****************Checks if test string is an element of the language*/
         if (expo[0] == expo[1]){
             if (A.size() == B.size()){
