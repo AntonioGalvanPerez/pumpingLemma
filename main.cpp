@@ -11,6 +11,7 @@
 using namespace std;
 vector<string> readLine();
 bool pumpingTest(vector <string> var, vector <string> expo, vector<int> min);
+bool checkPumpedString (vector <string> var, vector <string> expo, vector<int> min, string x, string y, string z);
 
 int main(int argc, const char *argv[])
 {
@@ -63,7 +64,7 @@ int main(int argc, const char *argv[])
         
     }
     
-    cout << "You entered: ";
+    cout << "\n\nYou entered: ";
     for (i = 0; i < var.size(); ++i)
     {
         cout << var[i] << "^" << expo[i] << " ";
@@ -75,10 +76,10 @@ int main(int argc, const char *argv[])
     isRegular = pumpingTest(var,expo,min);
     
     if (isRegular){
-        cout << "\nThe language passed the pumping lemma test" << endl;
+        cout << "\nThe language passed the pumping lemma test\n\n" << endl;
     }
     else{
-        cout << "\nThe language is not regular" << endl;
+        cout << "\nThe language is not regular\n\n" << endl;
     }
     return 0;
 }
@@ -110,8 +111,9 @@ bool  pumpingTest(vector<string> var, vector<string> expo, vector<int> min){
     }
 /****************Checks for 2 variables******************/
     if(var.size() ==2){
-        //if ((var.size() - intCount) == 1){
-    //Finds temp string of at at least length 4
+        if (intCount == 1){
+            return true;
+        }
             for(i = 0; i < 3; ++i){
                 
                 if (isdigit(expo[0][0])){
@@ -172,13 +174,15 @@ bool  pumpingTest(vector<string> var, vector<string> expo, vector<int> min){
         for (i = 1; i < testString.size(); ++i){
             z = z + testString[i + stringPositionB];
         }
-        cout <<"\n****Case 1: Left Parse " << "****" << endl;
+        cout <<"\nCase 1: Because |XY| <= P we know that Y must be in section " << "\"" << var[0] << "\""  << endl;
+        cout <<" P = " << min[0] << endl;
         cout <<"    X: " << x << endl;
         cout <<"    Y: " << y << endl;
         cout <<"    Z: " << z << endl;
+        return checkPumpedString (var, expo, min, x, y, z);
     }
 
-/****************Checks for 2 variables******************/
+/****************Checks for 3 variables******************/
     if(var.size() ==3){
         cout << "\nFIXME 3 Variables" << endl;
     }
@@ -197,7 +201,6 @@ vector<string> readLine()
     char ch;
     int i = 0;
     string inputString;
-    
     string tempString;
     vector<string> var;
     getline(cin, inputString);
@@ -222,5 +225,73 @@ vector<string> readLine()
     }
     
     return var;
+}
+
+/*************************Checks if Pumped string is an ellement of input langage ***********************/
+bool checkPumpedString (vector <string> var, vector <string> expo, vector<int> min, string x, string y, string z){
+    int i = 0, j = 0;
+    int stringPositionA = 0, stringPositionB = 0;
+    string pumpedY;
+    string testString;
+    string A,B,C;
+    
+    if (var.size() ==2){
+        pumpedY = pumpedY + y;
+        pumpedY = pumpedY + y;
+        testString = x + pumpedY + z;
+        cout << "\n\nPumped test string: " << testString << endl;
+        
+        //Parses the Data into the first and second variables
+        A = testString[0];
+        for (i = 0; i < testString.size(); ++i){
+            if (testString[i] == x[0]){
+                A = A + testString[i];
+                stringPositionA += 1;
+            }
+            else{
+                B = testString[i];
+                stringPositionA += 1;
+                break;
+            }
+        }
+        //Find B
+        stringPositionB = stringPositionA;
+        for (i = 0; i < testString.size(); ++i){
+            if (testString[i + stringPositionA] == B[0]){
+                B = B + testString[i + stringPositionA];
+                stringPositionB += 1;
+            }
+            else{
+                break;
+            }
+        }
+        
+        cout << var[0] << "^" <<expo[0] << " (" << var[0] << " >= " << min[0] << "): " << A << endl;
+        cout << var[1] << "^" <<expo[1] << " (" << var[1] << " >= " << min[1] << "): " << B << endl;
+        //****************Checks if test string is an element of the language*/
+        if (expo[0] == expo[1]){
+            if (A.size() == B.size()){
+                return true;
+            }
+            else{
+                cout << "\n\nBecause we have two diffrent values for \"" << expo[0] << "\" we show that the pumped string\n";
+                cout << "is not an ellement of the language. This shows a contradiction and therfore" << endl;
+                return false;
+            }
+        }
+        else if ((A.size() >= min[0]) && (B.size() >= min[1])){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    
+    
+    
+    
+        
+    return true;
+    
 }
 
