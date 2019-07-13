@@ -7,8 +7,8 @@
 #include <string>
 #include <vector>
 
-
 using namespace std;
+
 vector<string> readLine();
 bool pumpingTest(vector <string> var, vector <string> expo, vector<int> min);
 bool checkPumpedString (vector <string> var, vector <string> expo, vector<int> min, string x, string y, string z);
@@ -239,7 +239,14 @@ bool  pumpingTest(vector<string> var, vector<string> expo, vector<int> min){
         else{
             
 //**********************************************Case 1**********************************************
-            p = min[0] + min[1] + 1;
+            p = 0;
+            if(!isdigit(expo[0][0])) {
+                p = min[0];
+            } else if(!isdigit(expo[1][0])) {
+                p = min[0] + min[1];
+            } else {
+                p = min[0] + min[1] + 1;
+            }
             x = testString[0];
             
             for (i = 0; i < p; ++i){
@@ -331,7 +338,7 @@ bool  pumpingTest(vector<string> var, vector<string> expo, vector<int> min){
             
 //**********************************************Case 3**********************************************
 
-            x = testString[0];
+             /*x = testString[0];
             for (i = 1; i < testString.size(); ++i){
                 if (testString[i] == x[0]){
                     x = x + testString[i];
@@ -340,6 +347,39 @@ bool  pumpingTest(vector<string> var, vector<string> expo, vector<int> min){
                 else{
                     y = testString[i];
                     stringPositionA += 1;
+                    break;
+                }
+            }*/
+            checkVar = testString[0];
+        //Find X
+            for (i = 0; i < testString.size(); ++i){
+                if (testString[i+1] != checkVar) {
+                    checkVar = testString[i];
+                    varChange = varChange + 1;
+                }
+                
+                if (varChange < 1){
+                    if (stringPositionA > p){
+                        cout << "Greater Than P: " << p;
+                        break;
+                    }
+                    else{
+                        x = x + testString[i];
+                        stringPositionA += 1;
+                    }
+                }
+                
+                else{
+                    if (stringPositionA > p){
+                        cout << "Greater Than P: " << p;
+                        break;
+                    }
+                    
+                    else {
+                        y = y + testString[i];
+                        stringPositionA += 1;
+                    }
+                    
                     break;
                 }
             }
