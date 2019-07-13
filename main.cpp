@@ -76,7 +76,7 @@ int main(int argc, const char *argv[])
     isRegular = pumpingTest(var,expo,min);
     
     if (isRegular){
-        cout << "\nThe language passed the pumping lemma test\n\n" << endl;
+        cout << "\n\nThe language passed the pumping lemma test\n\n" << endl;
     }
     else{
         cout << "\nThe language is not regular\n\n" << endl;
@@ -86,11 +86,12 @@ int main(int argc, const char *argv[])
 
 /****************************************************************************/
 bool  pumpingTest(vector<string> var, vector<string> expo, vector<int> min){
-    bool isRegular = true;
-    int i = 0, j = 0, k = 0, l = 0, n = 0, p = 0;
+    bool isRegular = false;
+    int i = 0, j = 0, k = 0, l = 0, p = 0, varChange = 0;
     int intCount = 0;
     int stringPositionA = 0, stringPositionB = 0, stringPositionC = 0;
     int tempA = 0, tempB = 0, tempC = 0;
+    char checkVar;
     string testString;
     string x;
     string y;
@@ -103,16 +104,19 @@ bool  pumpingTest(vector<string> var, vector<string> expo, vector<int> min){
         }
     }
     if (intCount == var.size()){
+        isRegular = true;
         return isRegular;
     }
     /***************Checks for 1 variable*********************/
     if (var.size() == 1){
+        isRegular = true;
         return isRegular;
     }
     /****************Checks for 2 variables******************/
     if(var.size() ==2){
         if (intCount == 1){
-            return true;
+            isRegular = true;
+            return isRegular;
         }
         for(i = 0; i < 3; ++i){
             
@@ -220,25 +224,70 @@ bool  pumpingTest(vector<string> var, vector<string> expo, vector<int> min){
             
             
             if (testString.size() >= 6){
-                cout <<"\n\n*************************************************" << endl;
-                cout << "             Test String: " << testString << endl;
-                cout <<"*************************************************" << endl;
+                cout <<"\n\n***********************************************************" << endl;
+                cout << "*             Test String: " << testString << endl;
+                cout <<"***********************************************************" << endl;
                 break;
             }
             testString = "";
         }
         
         if(intCount == 2){
-            return true;
-        }
-        else if (isdigit(expo[0][0])){
-            cout << "\n\nP = min[0] + min[1] + 1" << endl;
-            cout << "FixME" << endl;
+            isRegular = true;
+            return isRegular;
         }
         else{
-
+            
 //**********************************************Case 1**********************************************
-            p = min[0];
+            p = min[0] + min[1] + 1;
+            x = testString[0];
+            
+            for (i = 0; i < p; ++i){
+                if (testString[i + 2] == x[0]){
+                    x = x + testString[i];
+                    stringPositionA += 1;
+                }
+                else{
+                    y = testString[i];
+                    stringPositionA += 1;
+                    break;
+                }
+            }
+            //Find Y
+            stringPositionB = stringPositionA;
+            for (i = 0; i < (p + stringPositionA); ++i){
+                if (testString[i + 2 + stringPositionA] == y[0]){
+                    y = y + testString[i + stringPositionA];
+                    stringPositionB += 1;
+                }
+                else{
+                    stringPositionB += 1;
+                    break;
+                }
+            }
+            //Find Z
+            for (i = stringPositionB; i < testString.size(); ++i){
+                z = z + testString[i];
+            }
+            cout <<"\n\n********************  Case: 1  *****************************" << endl;
+            cout << "\nTest String: " << testString << endl;
+            cout <<" P = " << p << endl;
+            cout <<"    X: " << x << endl;
+            cout <<"    Y: " << y << endl;
+            cout <<"    Z: " << z << endl;
+            if (checkPumpedString (var, expo, min, x, y, z)){
+                cout << "     Case 1: Pass";
+                isRegular = true;
+            }
+            else{
+                cout << "     Case 1: Fail";
+            }
+            //Clear strings/ string positions
+            x = y = z = "";
+            stringPositionA = stringPositionB = stringPositionC = 0;
+            
+//**********************************************Case 2**********************************************
+
             x = testString[0];
             for (i = 0; i < testString.size(); ++i){
                 if (testString[i + 2] == x[0]){
@@ -253,80 +302,35 @@ bool  pumpingTest(vector<string> var, vector<string> expo, vector<int> min){
             }
             //Find Y
             stringPositionB = stringPositionA;
-            for (i = 0; i < testString.size(); ++i){
-                if (testString[i + 2 + stringPositionA] == y[0]){
-                    y = y + testString[i + stringPositionA];
-                    stringPositionB += 1;
-                }
-                else{
-                    z = z + testString[i + stringPositionA + 1];
-                    stringPositionB += 1;
-                    break;
-                }
-            }
-            //Find Z
-            for (i = 1; i < testString.size(); ++i){
-                z = z + testString[i + stringPositionB];
-            }
-            cout <<"\n\n********************  Case: 1  *****************************" << endl;
-
-            cout <<" P = " << min[0] << endl;
-            cout <<"    X: " << x << endl;
-            cout <<"    Y: " << y << endl;
-            cout <<"    Z: " << z << endl;
-            if (checkPumpedString (var, expo, min, x, y, z)){
-                cout << "Case 1: Pass";
-                //return true;
-            }
-            else{
-                cout << "Case 1: Fail";
-            }
-            //Clear strings/ string positions
-            x = y = z = "";
-            stringPositionA = stringPositionB = stringPositionC = 0;
+            y = y + testString[stringPositionA + 1];
+            stringPositionB += 1;
             
-//**********************************************Case 2**********************************************
-            p = min[0];
-            x = testString[0];
-            for (i = 0; i < testString.size(); ++i){
-                if (testString[i + 2] == x[0]){
-                    x = x + testString[i];
-                    stringPositionA += 1;
-                }
-                else{
-                    y = testString[i];
-                    stringPositionA += 1;
-                    break;
-                }
-            }
-            //Find Y
-                    stringPositionB = stringPositionA;
-                    y = y + testString[stringPositionA + 1];
-                    stringPositionB += 1;
             //Find Z
-                    for (i = 1; i < testString.size(); ++i){
-                        z = z + testString[i + stringPositionB];
-                    }
+            for (i = stringPositionB; i < testString.size(); ++i){
+                z = z + testString[i];
+            }
 
-            cout <<"\n\n********************  Case: 2  *****************************" << endl;
-
-            cout <<" P = " << min[0] << endl;
+            cout <<"\n\n*************************  Case: 2  **********************************" << endl;
+            cout << "\nTest String: " << testString << endl;
+            cout <<" P = " << p << endl;
             cout <<"    X: " << x << endl;
             cout <<"    Y: " << y << endl;
             cout <<"    Z: " << z << endl;
             if (checkPumpedString (var, expo, min, x, y, z)){
-                cout << "Case 2: Pass";
-                return true;
+                cout << "     Case 2: Pass";
+                isRegular = true;
             }
             else{
-                cout << "Case 2: Fail";
+                cout << "     Case 2: Fail";
             }
+            
+            
             //Clear strings/ string positions
             x = y = z = "";
             stringPositionA = stringPositionB = stringPositionC = 0;
             
 //**********************************************Case 3**********************************************
-            p = min[0];
+
             x = testString[0];
             for (i = 1; i < testString.size(); ++i){
                 if (testString[i] == x[0]){
@@ -341,44 +345,174 @@ bool  pumpingTest(vector<string> var, vector<string> expo, vector<int> min){
             }
             //Find Y
             stringPositionB = stringPositionA;
-
+            
             //Find Z
-            for (i = 1; i < testString.size(); ++i){
-                z = z + testString[i + stringPositionB];
+            for (i = stringPositionB; i < testString.size(); ++i){
+                z = z + testString[i];
             }
+
             
-            cout <<"\n\n********************  Case: 3  *****************************" << endl;
-            
-            cout <<" P = " << min[0] << endl;
+            cout <<"\n\n*************************  Case: 3  **********************************" << endl;
+            cout << "\nTest String: " << testString << endl;
+            cout <<" P = " << p << endl;
             cout <<"    X: " << x << endl;
             cout <<"    Y: " << y << endl;
             cout <<"    Z: " << z << endl;
             if (checkPumpedString (var, expo, min, x, y, z)){
-                cout << "Case 3: Pass";
-                return true;
+                cout << "     Case 3: Pass";
+                isRegular = true;
             }
             else{
-                cout << "Case 3: Fail";
+                cout << "     Case 3: Fail";
             }
             
+            //Clear strings/ string positions
+            x = y = z = "";
+            stringPositionA = stringPositionB = stringPositionC = 0;
+            
+//**********************************************Case 4**********************************************
+
+            checkVar = testString[0];
+            for (i = 0; i < testString.size(); ++i){
+                if (testString[i + 1] != checkVar) {
+                    checkVar = testString[i];
+                    varChange = varChange + 1;
+                }
+                
+                if (varChange <= 2){
+                    if (stringPositionA > p){
+                        cout << "Greater Than P: " << p;
+                        break;
+                    }
+                    else{
+                        x = x + testString[i];
+                        stringPositionA += 1;
+                    }
+                }
+                
+                else{
+                    if (stringPositionA > p){
+                        cout << "Greater Than P: " << p;
+                        break;
+                    }
+                    
+                    else {
+                        y = testString[i];
+                        stringPositionA += 1;
+                    }
+                    
+                    break;
+                }
+            }
+            //Find Y
+            if (stringPositionA <= p){
+                y = y + testString[stringPositionA + 1];
+                stringPositionB = stringPositionA;
+            }
+            else{
+                cout << "Greater Than P: " << p;
+            }
+            
+            //Find Z
+            for (i = stringPositionB; i < testString.size(); ++i){
+                z = z + testString[i];
+            }
+
+            
+            cout <<"\n\n*************************  Case: 4  **********************************" << endl;
+            cout << "\nTest String: " << testString << endl;
+            cout <<" P = " << p << endl;
+            cout <<"    X: " << x << endl;
+            cout <<"    Y: " << y << endl;
+            cout <<"    Z: " << z << endl;
+            if (checkPumpedString (var, expo, min, x, y, z)){
+                cout << "     Case 4: Pass";
+                isRegular = true;
+            }
+            else{
+                cout << "     Case 4: Fail" << endl;
+            }
+
+            //Clear strings/ string positions
+            x = y = z = "";
+            stringPositionA = stringPositionB = stringPositionC = 0;
+            varChange = 0;
             
             
+//**********************************************Case 5**********************************************
+
+            checkVar = testString[0];
+        //Find X
+            for (i = 0; i < testString.size(); ++i){
+                if (testString[i + 1] != checkVar) {
+                    checkVar = testString[i];
+                    varChange = varChange + 1;
+                }
+                
+                if (varChange <= 2){
+                    if (stringPositionA > p){
+                        cout << "Greater Than P: " << p;
+                        break;
+                    }
+                    else{
+                        x = x + testString[i];
+                        stringPositionA += 1;
+                    }
+                }
+                
+                else{
+                    if (stringPositionA > p){
+                        cout << "Greater Than P: " << p;
+                        break;
+                    }
+                    
+                    else {
+                        x = x + testString[i];
+                        stringPositionA += 1;
+                    }
+                    
+                    break;
+                }
+            }
+            //Find Y
+            if (stringPositionA <= p){
+                y = y + testString[stringPositionA + 1];
+                stringPositionB = stringPositionA;
+            }
+            else{
+                cout << "Greater Than P: " << p;
+            }
             
+            //Find Z
+            for (i = stringPositionB; i < testString.size(); ++i){
+                z = z + testString[i];
+            }
             
+            cout <<"\n\n*************************  Case: 5  **********************************" << endl;
+            cout << "\nTest String: " << testString << endl;
+            cout <<" P = " << p << endl;
+            cout <<"    X: " << x << endl;
+            cout <<"    Y: " << y << endl;
+            cout <<"    Z: " << z << endl;
+            if (checkPumpedString (var, expo, min, x, y, z)){
+                cout << "     Case 5: Pass";
+                isRegular = true;
+            }
+            else{
+                cout << "     Case 5: Fail" << endl;
+            }
         }
-    
-            cout << "\n\nP = min[0] + 1" << endl;
-        }
-        
-    
-    return false;
+    }
+
+    if (isRegular){
+        return isRegular;
+    }
+    else{
+        cout << "\n\nGiven that \""<< testString << "\" is an ellement of our language and all possible test cases failed to produce a y which can be pumped this shows a contradication and therfor proves :" << endl;
+        return isRegular;
+    }
 }
-
-
-
-
 /****************************************************************************/
-
 
 //Function that parses the input based on commas returns a vector of variables
 vector<string> readLine()
@@ -414,11 +548,13 @@ vector<string> readLine()
 
 /*************************Checks if Pumped string is an ellement of input langage ***********************/
 bool checkPumpedString (vector <string> var, vector <string> expo, vector<int> min, string x, string y, string z){
-    int i = 0, j = 0;
+    int i = 0;
     int stringPositionA = 1, stringPositionB = 0, stringPositionC = 0;
+    string printString = (x + y + z);
     string pumpedY = y;
     string testString;
     string A,B,C;
+    string checkingString;
     
     if (var.size() ==2){
         pumpedY = pumpedY + y;
@@ -459,6 +595,7 @@ bool checkPumpedString (vector <string> var, vector <string> expo, vector<int> m
                 return true;
             }
             else{
+                cout << "\n\nGiven that \"" << printString << "\" is part of our language and by pumping \"" << y << "\" we can show that the new pumped string \"" << testString <<"\" is not an ellement of our language, becasue we have two different values for \"" << expo[0] << "\" this shows a contradiction and therfor proves:\n";
                 return false;
             }
         }
@@ -477,6 +614,7 @@ bool checkPumpedString (vector <string> var, vector <string> expo, vector<int> m
         
         //Parses the Data into the first and second variables
         A = testString[0];
+        
         for (i = 1; i < testString.size(); ++i){
             if (testString[i] == x[0]){
                 A = A + testString[i];
@@ -516,7 +654,35 @@ bool checkPumpedString (vector <string> var, vector <string> expo, vector<int> m
         cout << var[0] << "^" <<expo[0] << " (" << expo[0] << " >= " << min[0] << "): " << A << endl;
         cout << var[1] << "^" <<expo[1] << " (" << expo[1] << " >= " << min[1] << "): " << B << endl;
         cout << var[2] << "^" <<expo[2] << " (" << expo[2] << " >= " << min[2] << "): " << C << endl;
+        checkingString = A + B + C;
         //****************Checks if test string is an element of the language*/
+        if (checkingString.size() != testString.size()){
+            cout << "ABC: " << checkingString.size() << endl;
+            cout << "test: " << testString.size() << endl;
+            cout << "\nFailed test 1\n" << endl;
+            return false;
+        }
+        if((isdigit(expo[0][0]))){
+            if (A.size() != stoi(expo[0])){
+                cout << "\nFailed test 2\n" << endl;
+                return false;
+            }
+        }
+        if((isdigit(expo[1][0]))){
+            if (B.size() != stoi(expo[1])){
+                cout << "\nFailed test 3\n" << endl;
+                return false;
+            }
+        }
+        if((isdigit(expo[2][0]))){
+            if (C.size() != stoi(expo[2])){
+                cout << "\nFailed test 4\n" << endl;
+                return false;
+            }
+        }
+        
+        
+        
         if (expo[0] == expo[1] && expo[1] == expo[2]){
             if (A.size() == B.size() && B.size() == C.size()){
                 return true;
@@ -558,6 +724,4 @@ bool checkPumpedString (vector <string> var, vector <string> expo, vector<int> m
     }
     
     return true;
-    
 }
-
