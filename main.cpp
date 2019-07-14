@@ -192,25 +192,47 @@ bool  pumpingTest(vector<string> var, vector<string> expo, vector<int> min){
     
     /****************Checks for 3 variables******************/
     if(var.size() ==3){
+            p = min[0] + min[1] + 1;
         //*******************Creats test string*************/
         for(i = 0; i < 3; ++i){
             //Checks if first variable's exponnent is an int or a variable
             if (isdigit(expo[0][0])){
                 tempA = stoi(expo[0]);
             }
-            else tempA = i + min[0];
+            else {
+                tempA = i + p;
+            }
             
             //Checks if second variable's exponnent is an int or a variable
             if (isdigit(expo[1][0])){
                 tempB = stoi(expo[1]);
             }
-            else tempB = i + min[1];
-            
+            else {
+                if (expo[0] == expo[1]){
+                    tempB = tempA;
+                }
+                else if (isdigit(expo[0][0])){
+                    tempB = i + p;
+                }
+                else{
+                    tempB = i + min[1];
+                    }
+                }
             //Checks if second variable's exponnent is an int or a variable
             if (isdigit(expo[2][0])){
                 tempC = stoi(expo[2]);
             }
-            else tempC = i + min[2];
+            else {
+                if (expo[2] == expo[1]){
+                    tempC = tempB;
+                }
+                else if (expo[2] == expo[0]){
+                    tempC = tempA;
+                }
+                else{
+                    tempC = i + min[2];
+                }
+            }
             
             
             for(j = 0; j < tempA; ++j){
@@ -240,14 +262,13 @@ bool  pumpingTest(vector<string> var, vector<string> expo, vector<int> min){
         else{
             
     //**********************************************Case 1**********************************************
-            p = 0;
-            if(!isdigit(expo[0][0])) {
+            /*if(!isdigit(expo[0][0])) {
                 p = min[0];
             } else if(!isdigit(expo[1][0])) {
                 p = min[0] + min[1];
             } else {
                 p = min[0] + min[1] + 1;
-            }
+            }*/
             
             x = testString[0];
             
@@ -354,7 +375,7 @@ bool  pumpingTest(vector<string> var, vector<string> expo, vector<int> min){
                 }
                 
                 if (varChange <= 1){
-                    if (stringPositionA > p){
+                    if (stringPositionA > (p - 1)){
                         cout << "Greater Than P: " << p;
                         break;
                     }
@@ -365,7 +386,7 @@ bool  pumpingTest(vector<string> var, vector<string> expo, vector<int> min){
                 }
                 
                 else{
-                    if (stringPositionA > p){
+                    if (stringPositionA >= p){
                         cout << "Greater Than P: " << p;
                         break;
                     }
@@ -416,9 +437,8 @@ bool  pumpingTest(vector<string> var, vector<string> expo, vector<int> min){
                     varChange = varChange + 1;
                 }
                 
-                if (varChange <= 3){
+                if (varChange <= 2){
                     if (stringPositionA > (p - 1)){
-                        cout << "*Greater Than P: " << p;
                         //break;
                     }
                     else{
@@ -429,7 +449,6 @@ bool  pumpingTest(vector<string> var, vector<string> expo, vector<int> min){
                 
                 else{
                     if (stringPositionA >= p){
-                        cout << "**Greater Than P: " << p;
                         //break;
                     }
                     
@@ -444,9 +463,6 @@ bool  pumpingTest(vector<string> var, vector<string> expo, vector<int> min){
             //Find Y
             if (stringPositionA < p){
                 y = y + testString[stringPositionA + 1];
-            }
-            else{
-                cout << "***Greater Than P: " << p;
             }
             
             
@@ -595,7 +611,7 @@ bool checkPumpedString (vector <string> var, vector <string> expo, vector<int> m
     string checkingString;
     
     if (y == ""){
-        cout << "\n\n               ********MISSING Y*********\n\n";
+        cout << "\n\n               ********   MISSING Y  *********\n\n";
         return false;
     }
     
@@ -700,26 +716,20 @@ bool checkPumpedString (vector <string> var, vector <string> expo, vector<int> m
         checkingString = A + B + C;
         //****************Checks if test string is an element of the language*/
         if (checkingString.size() != testString.size()){
-            cout << "ABC: " << checkingString.size() << endl;
-            cout << "test: " << testString.size() << endl;
-            cout << "\nFailed test 1\n" << endl;
             return false;
         }
         if((isdigit(expo[0][0]))){
             if (A.size() != stoi(expo[0])){
-                cout << "\nFailed test 2\n" << endl;
                 return false;
             }
         }
         if((isdigit(expo[1][0]))){
             if (B.size() != stoi(expo[1])){
-                cout << "\nFailed test 3\n" << endl;
                 return false;
             }
         }
         if((isdigit(expo[2][0]))){
             if (C.size() != stoi(expo[2])){
-                cout << "\nFailed test 4\n" << endl;
                 return false;
             }
         }
